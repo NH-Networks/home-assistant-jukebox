@@ -34,7 +34,6 @@ class JukeboxCard extends HTMLElement {
             this._tabs.appendChild(this.buildSpeakerSwitch(entityId, hass));
         });
 
-        // automatically activate the first speaker that's playing
         const firstPlayingSpeakerIndex = this.findFirstPlayingIndex(hass);
         this._selectedSpeaker = this.config.entities[firstPlayingSpeakerIndex];
         this._tabs.setAttribute('selected', firstPlayingSpeakerIndex);
@@ -54,7 +53,6 @@ class JukeboxCard extends HTMLElement {
             stationList.appendChild(stationButton);
         });
 
-        // make sure the update method is notified of a change
         this._hassObservers.push(this.updateStationSwitchStates.bind(this));
 
         return stationList;
@@ -78,7 +76,7 @@ class JukeboxCard extends HTMLElement {
         slider.addEventListener('change', this.onChangeVolumeSlider.bind(this));
         slider.className = 'flex';
 
-        const stopButton = document.createElement('ha-icon-button')
+        const stopButton = document.createElement('ha-icon-button');
         stopButton.icon = 'hass:stop';
         stopButton.setAttribute('disabled', true);
         stopButton.addEventListener('click', this.onStop.bind(this));
@@ -86,20 +84,18 @@ class JukeboxCard extends HTMLElement {
 	sbIcon.icon = 'hass:stop';
 	stopButton.appendChild(sbIcon);
 
-
         this._hassObservers.push(hass => {
             if (!this._selectedSpeaker || !hass.states[this._selectedSpeaker]) {
                 return;
             }
             const speakerState = hass.states[this._selectedSpeaker].attributes;
 
-            // no speaker level? then hide mute button and volume
             if (!speakerState.hasOwnProperty('volume_level')) {
                 slider.setAttribute('hidden', true);
-                stopButton.setAttribute('hidden', true)
+                stopButton.setAttribute('hidden', true);
             } else {
                 slider.removeAttribute('hidden');
-                stopButton.removeAttribute('hidden')
+                stopButton.removeAttribute('hidden');
             }
 
             if (!speakerState.hasOwnProperty('is_volume_muted')) {
@@ -200,13 +196,6 @@ class JukeboxCard extends HTMLElement {
         });
     }
 
-    /***
-     * returns the numeric index of the first entity in a "Playing" state, or 0 (first index).
-     *
-     * @param hass
-     * @returns {number}
-     * @private
-     */
     findFirstPlayingIndex(hass) {
         return Math.max(0, this.config.entities.findIndex(entityId => {
             return hass.states[entityId] && hass.states[entityId].state === 'playing';
@@ -282,21 +271,4 @@ function getStyle() {
     
     mwc-button.juke-toggle[raised] {
         --mdc-theme-primary: var(--primary-color);
-        background-color: var(--primary-color);
-        color: var(--text-primary-color);
-    }
-    
-    paper-tabs {
-        background-color: var(--primary-color);
-        color: var(--text-primary-color);
-        --paper-tabs-selection-bar-color: var(--text-primary-color, #FFF);
-    }
-            
-    `;
-
-    frag.appendChild(included);
-    frag.appendChild(ownStyle);
-    return frag;
-}
-
-customElements.define('jukebox-card', JukeboxCard);
+        background-color: var(--primary-color
